@@ -1,0 +1,12 @@
+###################################################################################################################
+# MangosTool SETTINGS
+#
+#    MangosTool.Enable
+#        Enable MangosTool chat system
+#        Default: 1 (enable - enables system)
+#                 0 (disable - disables system)
+#
+#
+###################################################################################################################
+
+Transmog.Enable = 0
