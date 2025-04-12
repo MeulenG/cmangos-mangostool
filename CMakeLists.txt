@@ -47,11 +47,12 @@ if ( ${CMAKE_PROJECT_NAME} MATCHES "WoTLK")
 endif()
 
 add_library(${LIBRARY_NAME} STATIC ${LIBRARY_SRCS})
-
+find_package(CURL REQUIRED)
 target_link_libraries(${LIBRARY_NAME}
   modules
   shared
   RecastNavigation::Detour
+  CURL::libcurl
 )
 
 if(UNIX)

@@ -11,16 +11,13 @@ namespace cmangos_module
 {
     typedef std::unordered_map<std::string, std::string> commandMap;
 
-    class MangosToolModule : public Module
+    class MangostoolModule : public Module
     {
     public:
-        MangosToolModule();
-
-    private:
-        
-
-    private:
+        MangostoolModule();
+        const MangostoolModuleConfig* GetConfig() const override;
+        void pingModel(const Player* player, const char* prefix, const char* message);
         
     };
 }
-#endif
+#endif  

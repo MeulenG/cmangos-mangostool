@@ -1,4 +1,4 @@
-#include "MangosToolModule.h"
+#include "MangostoolModule.h"
 
 #include "Entities/GossipDef.h"
 #include "Entities/Player.h"
@@ -10,27 +10,24 @@
 
 
 namespace cmangos_module {
-	void MangosToolModule::pingModel(const Player* player, const char* prefix, const char* message) {
+	MangostoolModule::MangostoolModule()
+		: Module("Mangostool", new MangostoolModuleConfig())
+	{
+
+	}
+
+	const cmangos_module::MangostoolModuleConfig* MangostoolModule::GetConfig() const
+	{
+		return (MangostoolModuleConfig*)Module::GetConfig();
+	}
+	void MangostoolModule::pingModel(const Player* player, const char* prefix, const char* message) {
 		WorldPacket data;
-		std::cout << message;
-		std::cout << prefix;
 
-        std::ostringstream out;
-		out << message;
-
-        char* buf = mangos_strdup(out.str().c_str());
-        char* pos = buf;
-
-        while (char* line = ChatHandler::LineFromMessage(pos))
-        {
-#if EXPANSION == 0
-            ChatHandler::BuildChatPacket(data, CHAT_MSG_ADDON, line, LANG_ADDON);
-#else
-            ChatHandler::BuildChatPacket(data, CHAT_MSG_WHISPER, line, LANG_ADDON);
-#endif
-            player->GetSession()->SendPacket(data);
-        }
-		commandMap.insert(std::pair<std::string, std::string>(message));
+		std::ostringstream out;
+		out << prefix << message;
+		// Jsonify the message
+		std::string jsonMessage = out.str();
+		std::string commandMap = "{\"command\":\"ping\",\"message\":\"" + jsonMessage + "\"}";
 		CURL *curl;
 		CURLcode res;
 		struct curl_slist *slist1;
@@ -55,5 +52,4 @@ namespace cmangos_module {
 		}
 		curl_global_cleanup();
 	}
-        delete[] buf;
 }
