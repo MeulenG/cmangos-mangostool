@@ -16,8 +16,9 @@ namespace cmangos_module
     public:
         MangostoolModule();
         const MangostoolModuleConfig* GetConfig() const override;
-        void pingModel(const Player* player, const char* prefix, const char* message);
+        bool pingModel(WorldSession* session, const std::string& args);
+        std::vector<ModuleChatCommand>* GetCommandTable() override;
         
     };
 }
-#endif  
+#endif  // CMANGOS_MODULE_MANGOSTOOL_H

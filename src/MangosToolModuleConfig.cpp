@@ -6,14 +6,14 @@ namespace cmangos_module
 {
     MangostoolModuleConfig::MangostoolModuleConfig()
     : ModuleConfig("mangostool.conf")
-    , enabled(false)
+    , enabled(true)
     {
     
     }
 
     bool MangostoolModuleConfig::OnLoad()
     {
-        enabled = config.GetBoolDefault("MangosTool.Enable", false);
+        enabled = config.GetBoolDefault("MangosTool.Enable", true);
 
         return true;
     }
