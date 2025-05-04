@@ -126,7 +126,26 @@ namespace cmangos_module {
 				sLog.outString("Teleporting to: %f %f %f %u\n", x, y, z, map_id);
 			}
 			else if (responseString.find("additem") != std::string::npos) {
-				chatHandler.HandleAddItemCommand(player, responseString.c_str());
+				char input[100] = { 0 };
+				std::list<std::string> teleportList;
+				strncpy(input, responseString.c_str(), sizeof(input) - 1);
+				const char* delimiter = " ";
+				char* token = strtok(input, delimiter);
+				// Model will always answer in the format: .go x y z map_id
+				while (token) {
+					std::cout << token << "\n";
+					teleportList.push_back(token);
+					token = strtok(nullptr, delimiter);
+				}
+				if (teleportList.size() < 4) {
+					sLog.outString("Invalid teleport command format.\n");
+					return false;
+				}
+				// format is .additem item_id
+				// first remove .additem
+				teleportList.pop_front();
+				uint32 item_id = std::stoi(teleportList.front());
+				chatHandler.HandleAddItemCommand(player, item_id);
 				sLog.outString("Adding item: %s\n", responseString.c_str());
 			}
 			else {
