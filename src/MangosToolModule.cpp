@@ -125,6 +125,13 @@ namespace cmangos_module {
 				chatHandler.HandleGoHelper(player, map_id, x, y, &z, nullptr);
 				sLog.outString("Teleporting to: %f %f %f %u\n", x, y, z, map_id);
 			}
+			else if (responseString.find("additem") != std::string::npos) {
+				chatHandler.HandleAddItemCommand(player, responseString.c_str());
+				sLog.outString("Adding item: %s\n", responseString.c_str());
+			}
+			else {
+				sLog.outString("Either an invalid query or Invalid command format.\n");
+			}
 			// Cleanup
 			curl_easy_cleanup(curl);
 			curl_slist_free_all(slist1);
