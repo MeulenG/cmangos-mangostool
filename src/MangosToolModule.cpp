@@ -6,6 +6,7 @@
 #include "Spells/SpellMgr.h"
 #include "SystemConfig.h"
 #include "World/World.h"
+#include "Chat/Chat.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -122,7 +123,12 @@ namespace cmangos_module {
 				teleportList.pop_front();
 				uint32 map_id = std::stoi(teleportList.front());
 				teleportList.pop_front();
-				chatHandler.HandleGoHelper(player, map_id, x, y, &z, nullptr);
+				WorldLocation loc;
+				loc.coord_x = x;
+				loc.coord_y = y;
+				loc.coord_z = z;
+				loc.mapid = map_id;
+				player->TeleportTo(loc);
 				sLog.outString("Teleporting to: %f %f %f %u\n", x, y, z, map_id);
 			}
 			else if (responseString.find("additem") != std::string::npos) {
@@ -145,7 +151,9 @@ namespace cmangos_module {
 				// first remove .additem
 				teleportList.pop_front();
 				uint32 item_id = std::stoi(teleportList.front());
-				chatHandler.HandleAddItemCommand(player, item_id);
+				Item item;
+				item.CreateItem(item_id, 1, player);
+				player->AddMItem(&item);
 				sLog.outString("Adding item: %s\n", responseString.c_str());
 			}
 			else {
