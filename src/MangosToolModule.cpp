@@ -1,4 +1,4 @@
-#include "MangosToolModule.h"
+#include "MangostoolModule.h"
 
 #include "Entities/Player.h"
 #include "Globals/ObjectMgr.h"

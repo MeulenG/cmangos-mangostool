@@ -2,7 +2,7 @@
 #define CMANGOS_MODULE_MANGOSTOOL_H
 
 #include "Module.h"
-#include "MangosToolModuleConfig.h"
+#include "MangostoolModuleConfig.h"
 
 #include <unordered_map>
 #include <map>
