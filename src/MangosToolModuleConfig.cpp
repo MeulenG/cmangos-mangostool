@@ -1,4 +1,4 @@
-#include "MangostoolModuleConfig.h"
+#include "MangosToolModuleConfig.h"
 #include "Globals/ObjectMgr.h"
 #include "Log/Log.h"
 
