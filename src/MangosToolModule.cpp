@@ -9,6 +9,13 @@
 #include "Chat/Chat.h"
 
 #include <iostream>
+#if defined(_WIN64)
+    #include <fstream>
+
+#else
+    #include <iostream>
+
+#endif
 #include <stdio.h>
 #include <curl/curl.h>
 #include <string>
