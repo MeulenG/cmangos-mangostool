@@ -47,13 +47,25 @@ if ( ${CMAKE_PROJECT_NAME} MATCHES "WoTLK")
 endif()
 
 add_library(${LIBRARY_NAME} STATIC ${LIBRARY_SRCS})
-find_package(CURL REQUIRED)
-target_link_libraries(${LIBRARY_NAME}
-  modules
-  shared
-  RecastNavigation::Detour
-  CURL::libcurl
-)
+
+if(WIN32)
+    set(CMAKE_PREFIX_PATH "C:/Program Files/curl")
+    find_package(CURL REQUIRED)
+    add_definitions(-DCURL_STATICLIB)
+    target_link_libraries(${LIBRARY_NAME}
+        modules
+        shared
+        RecastNavigation::Detour
+        CURL::libcurl
+    )
+elseif(UNIX)
+    target_link_libraries(${LIBRARY_NAME}
+        modules
+        shared
+        RecastNavigation::Detour
+        CURL::libcurl
+    )
+endif()
 
 if(UNIX)
   if (NOT (CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "NetBSD"))
