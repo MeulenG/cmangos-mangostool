@@ -17,7 +17,32 @@
 #
 
 set(LIBRARY_NAME mangostool)
+set(BUILD_CURL_EXE OFF CACHE INTERNAL "")
+set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "")
 
+set(CURL_DISABLE_LDAP ON CACHE INTERNAL "")
+set(CURL_DISABLE_LDAPS ON CACHE INTERNAL "")
+set(CURL_DISABLE_TELNET ON CACHE INTERNAL "")
+set(CURL_DISABLE_TFTP ON CACHE INTERNAL "")
+set(CURL_DISABLE_DICT ON CACHE INTERNAL "")
+set(CURL_DISABLE_FILE ON CACHE INTERNAL "")
+set(CURL_DISABLE_GOPHER ON CACHE INTERNAL "")
+set(CURL_DISABLE_IMAP ON CACHE INTERNAL "")
+set(CURL_DISABLE_MQTT ON CACHE INTERNAL "")
+set(CURL_DISABLE_POP3 ON CACHE INTERNAL "")
+set(CURL_DISABLE_RTSP ON CACHE INTERNAL "")
+set(CURL_DISABLE_SMB ON CACHE INTERNAL "")
+set(CURL_DISABLE_SMTP ON CACHE INTERNAL "")
+set(CURL_DISABLE_SRP ON CACHE INTERNAL "")
+set(CURL_DISABLE_FTP ON CACHE INTERNAL "")
+set(CURL_DISABLE_SCP ON CACHE INTERNAL "")
+set(CURL_DISABLE_SFTP ON CACHE INTERNAL "")
+set(CURL_DISABLE_LDAP ON CACHE INTERNAL "")
+
+set(CURL_DISABLE_LIBSSH2 ON CACHE INTERNAL "")
+set(CURL_USE_LIBSSH2 OFF CACHE INTERNAL "")
+
+set(CURL_DISABLE_PROXY ON CACHE INTERNAL "")
 #Base files
 file(GLOB mangostool_source ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
   source_group("mangostool" FILES ${mangostool_source})
@@ -49,16 +74,27 @@ endif()
 add_library(${LIBRARY_NAME} STATIC ${LIBRARY_SRCS})
 
 if(WIN32)
-    set(CMAKE_PREFIX_PATH "C:/Program Files/curl")
+    include(FetchContent)
+    FetchContent_Declare(
+      curl
+      URL https://curl.se/download/curl-8.5.0.tar.gz
+      DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+      OVERRIDE_FIND_PACKAGE
+    )
+
+    FetchContent_MakeAvailable(curl)
+
     find_package(CURL REQUIRED)
-    add_definitions(-DCURL_STATICLIB)
+
     target_link_libraries(${LIBRARY_NAME}
-        modules
-        shared
-        RecastNavigation::Detour
-        CURL::libcurl
+        PRIVATE
+            modules
+            shared
+            RecastNavigation::Detour
+            CURL::libcurl wldap32 ws2_32 Crypt32.lib Wldap32 Normaliz
     )
 elseif(UNIX)
+    find_package(CURL REQUIRED)
     target_link_libraries(${LIBRARY_NAME}
         modules
         shared
@@ -66,6 +102,7 @@ elseif(UNIX)
         CURL::libcurl
     )
 endif()
+
 
 if(UNIX)
   if (NOT (CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "NetBSD"))
